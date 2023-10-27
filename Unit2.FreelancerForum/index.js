@@ -17,7 +17,10 @@ let freelancers = [
 ];
 
 function renderFreelancers() {
-    let freelancersListings = document.getElementById("freelancers-listings");
+    let freelancersListings = document.getElementById("freelancers-listings");  
+
+    // I think I'm not understanding something about this part of the code
+    // Also wondering if my for loop is exactly correct
 
     for (let i = 0; i < freelancers.length; i++) {
         let currentFreelancers = freelancers[i];
