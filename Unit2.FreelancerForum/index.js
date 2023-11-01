@@ -14,32 +14,124 @@ let freelancers = [
         occupation: "Programmer",
         price: 70,
     },
+    {
+        name: "Kaden",
+        occupation: "Welder",
+        price: 40,
+    },
+    {
+        name: "Traver",
+        occupation: "Baseball Coach",
+        price: 35,
+    },
+    {
+        name: "Sue",
+        occupation: "Math Tutor",
+        price: 45,
+    },
+    {
+        name: "Allen",
+        occupation: "Janitor",
+        price: 25,
+    },
+    {
+        name: "George",
+        occupation: "Handyman",
+        price: 65,
+    },
+    {
+        name: "Fred",
+        occupation: "Mechanic",
+        price: 70,
+    },
 ];
 
-function renderFreelancers() {
-    let freelancersListings = document.getElementById("freelancers-listings");  
+// select the let element = docmuent.querySelector(`#freelancer-name .freelancer${index}`)
+// add the frist three freelancers to the table
 
-    // I think I'm not understanding something about this part of the code
-    // Also wondering if my for loop is exactly correct
+//
 
-    for (let i = 0; i < freelancers.length; i++) {
-        let currentFreelancers = freelancers[i];
+// run a set timeout that randomly modifies a random one of the freelancers on the list with a new random frelancer from the freelancers array
+// let randomFreelancer = random freelancer from array
+// let randomPosition = get random position from the freelancers list (1, 2, or 3)
+//  modify the cooresponding elements with the new freelancer
 
-        // Creating parent element
-        let listingsDiv = document.createElement("ul");
-        listingsDiv.className = "listings";
+const freelancerObj = {
+    1: {
+        nameElement: document.querySelector(`#freelancer-name .freelancer1`),
+        occupationElement: document.querySelector(`#freelancer-occupation .freelancer1`),
+        priceElement: document.querySelector(`#freelancer-price .freelancer1`),
+        price: null,
+        index: null,
+    },
+    2: {
+        nameElement: document.querySelector(`#freelancer-name .freelancer2`),
+        occupationElement: document.querySelector(`#freelancer-occupation .freelancer2`),
+        priceElement: document.querySelector(`#freelancer-price .freelancer2`),
+        price: null,
+        index: null,
+    },
+    3: {
+        nameElement: document.querySelector(`#freelancer-name .freelancer3`),
+        occupationElement: document.querySelector(`#freelancer-occupation .freelancer3`),
+        priceElement: document.querySelector(`#freelancer-price .freelancer3`),
+        price: null,
+        index: null,
+    },
+};
 
-        // add content to listings div element
-        listingsDiv.innerHTML = `<li> <h3>Name</3> </li>
-                        <li> ${currentFreelancers.name} </li>
-                        li> <h3>Occupation</3> </li>
-                        <li> ${currentFreelancers.occupation} </li>
-                        li> <h3>Starting Price</3> </li>
-                        <li> ${currentFreelancers.price} </li>`;
+const addFreelancerToList = (freelancer, position) => {
+    freelancerObj[position].nameElement.innerHTML = `<li>${freelancer.name}</li>`;
+    freelancerObj[position].occupationElement.innerHTML = `<li>${freelancer.occupation}</li>`;
+    freelancerObj[position].priceElement.innerHTML = `<li>${freelancer.price}</li>`;
+};
 
-        // Appending the element to page
-        freelancersListings.appendChild(listingsDiv);
+const modifyAvgPrice = () => {
+    const avgPriceElement = document.getElementById("average-price");
+    const sumPrice = freelancerObj[1].price + freelancerObj[2].price + freelancerObj[3].price;
+    const avgPrice = Math.floor(sumPrice / 3);
+
+    avgPriceElement.innerHTML = avgPrice;
+};
+
+const getNewFreelancer = () => {
+    // returns a random freelancer from the freelancers array
+    let usedIndexes = [freelancerObj[1].index, freelancerObj[2].index, freelancerObj[3].index];
+    let newIndex;
+    while (!newIndex) {
+        newIndex = Math.floor(Math.random() * freelancers.length);
+        if (usedIndexes.find((i) => i === newIndex)) newIndex = null;
     }
-}
-// invoke the function
-renderFreelancers();
+    let newFreelancer = freelancers[newIndex];
+    newFreelancer.index = newIndex;
+    return newFreelancer;
+};
+
+const getNewFreelancerPosition = () => {
+    // returns random number between 1 and 3
+
+    return Math.floor(Math.random() * 3 + 1);
+};
+
+// initiate freelancer list
+const initiateFreelancerList = () => {
+    for (let i = 0; i < 3; i++) {
+        let currentFreelancer = freelancers[i];
+        addFreelancerToList(currentFreelancer, i + 1);
+        freelancerObj[i + 1].price = currentFreelancer.price;
+        freelancerObj[i + 1].index = i;
+    }
+    modifyAvgPrice();
+};
+initiateFreelancerList();
+
+// update freelancer list
+setInterval(() => {
+    const newFreelancer = getNewFreelancer();
+    const newFreelancerPosition = getNewFreelancerPosition();
+
+    freelancerObj[newFreelancerPosition].price = newFreelancer.price;
+    freelancerObj[newFreelancerPosition].index = newFreelancer.index;
+    addFreelancerToList(newFreelancer, newFreelancerPosition);
+    modifyAvgPrice();
+}, 3000);
